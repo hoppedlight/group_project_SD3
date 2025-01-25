@@ -65,7 +65,6 @@ def track_parcel(parcel_id):
 if __name__ == "__main__":
     create_user("Dmytro", "Dmytro@gmail.com", "+380123456789")
     create_user("Maksym", "Maksym@gmail.com", "+380987654321")
-    create_user("Viktor The Great", "viktorlutsyk@gmail.com", "+3809876542521")
 
     sender_id = users_collection.find_one({"name": "Maksym"})["_id"]
     receiver_id = users_collection.find_one({"name": "Dmytro"})["_id"]
