@@ -39,7 +39,7 @@ def create_parcel(sender_id, receiver_id, description):
 def update_parcel_status(parcel_id, new_status):
     parcels_collection.update_one(
         {"_id": parcel_id},
-        {"$set": {"status": new_status, "updated_at": datetime.now(timezone.utc)}}  # Updated
+        {"$set": {"status": new_status, "updated_at": datetime.now(timezone.utc)}}
     )
     status_entry = {
         "parcel_id": parcel_id,
@@ -50,11 +50,10 @@ def update_parcel_status(parcel_id, new_status):
     print(f"Status of parcel {parcel_id} updated to: {new_status}")
 
 
-
 def track_parcel(parcel_id):
     parcel = parcels_collection.find_one({"_id": parcel_id})
     if parcel:
-        statuses = statuses_collection.find({"parcel_id": parcel_id})  # Corrected to use find
+        statuses = statuses_collection.find({"parcel_id": parcel_id})
         print(f"Information about parcel: {parcel}")
         print("History of statuses:")
         for status in statuses:
@@ -89,7 +88,3 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
-
-
-if __name__ == '__main__':
-    main()
