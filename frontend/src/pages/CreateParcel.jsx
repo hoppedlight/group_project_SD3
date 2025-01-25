@@ -56,7 +56,6 @@ export const CreateParcel = () => {
         </select>
       </div>
 
-      {/* Shipment Type */}
       <div className="form-group">
         <h2 className="section-title">Shipment Type</h2>
         <div className="button-group">

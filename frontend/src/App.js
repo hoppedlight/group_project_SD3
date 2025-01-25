@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import { CreateParcel } from './pages/CreateParcel';
 import './App.css';
 
