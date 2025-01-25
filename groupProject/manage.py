@@ -22,19 +22,21 @@ def create_user(name, email, phone):
     result = users_collection.insert_one(user)
     print(f"The user was created with the ID: {result.inserted_id}")
 
-
-def create_parcel(sender_id, receiver_id, description):
+def create_parcel(sender_id, receiver_id, description, size, cost, origin, destination):
     parcel = {
         "sender_id": sender_id,
         "receiver_id": receiver_id,
         "description": description,
+        "size": size,
+        "cost": cost,
+        "origin": origin,
+        "destination": destination,
         "status": "Parcel was created ;)",
         "created_at": datetime.now(timezone.utc),
         "updated_at": datetime.now(timezone.utc)
     }
     result = parcels_collection.insert_one(parcel)
     print(f"The parcel was created with the track-number: {result.inserted_id}")
-
 
 def update_parcel_status(parcel_id, new_status):
     parcels_collection.update_one(
@@ -49,7 +51,6 @@ def update_parcel_status(parcel_id, new_status):
     statuses_collection.insert_one(status_entry)
     print(f"Status of parcel {parcel_id} updated to: {new_status}")
 
-
 def track_parcel(parcel_id):
     parcel = parcels_collection.find_one({"_id": parcel_id})
     if parcel:
@@ -61,16 +62,25 @@ def track_parcel(parcel_id):
     else:
         print("Parcel not found.")
 
-
 if __name__ == "__main__":
-    create_user("Dmytro", "Dmytro@gmail.com", "+380123456789")
+    create_user("Dmytro Grebeniev", "Dmytro@gmail.com", "+380123456789")
     create_user("Maksym Kyryk", "Maksym@gmail.com", "+380987654321")
 
     sender_id = users_collection.find_one({"name": "Maksym Kyryk"})["_id"]
-    receiver_id = users_collection.find_one({"name": "Dmytro"})["_id"]
-    create_parcel(sender_id, receiver_id, "Book for Dmytro")
+    receiver_id = users_collection.find_one({"name": "Dmytro Grebeniev"})["_id"]
+
+    create_parcel(
+        sender_id, 
+        receiver_id, 
+        "Book for Dmytro", 
+        size="30x20x10 cm",  
+        cost=200,  
+        origin="Lviv",  
+        destination="Kyiv" 
+    )
 
     parcel_id = parcels_collection.find_one({"description": "Book for Dmytro"})["_id"]
+
     update_parcel_status(parcel_id, "Sent")
     update_parcel_status(parcel_id, "On the way")
 

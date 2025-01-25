@@ -4,9 +4,7 @@ import './App.css';
 
 function App() {
   return (
-    <CreateParcel >
-      
-    </CreateParcel>
+    <CreateParcel></CreateParcel>
   );
 }
 

@@ -11,7 +11,7 @@ export const CreateParcel = () => {
   const [recipientInfo, setRecipientInfo] = useState({ name: '', phone: '', email: '' });
   const [documentType, setDocumentType] = useState('A4');
 
-  // Handle input changes
+
   const handleInputChange = (event, setter) => {
     const { name, value } = event.target;
     setter((prev) => ({ ...prev, [name]: value }));
