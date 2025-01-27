@@ -10,33 +10,26 @@ const Track = () => {
       setError("Please enter a tracking code.");
       return;
     }
-
+  
     setError(null);
     setParcelInfo(null);
-
-    const mockData = {
-      "123456": {
-        status: "In Transit",
-        origin: "New York, NY",
-        destination: "Los Angeles, CA",
-        estimatedDelivery: "2025-02-01",
-      },
-      "654321": {
-        status: "Delivered",
-        origin: "Chicago, IL",
-        destination: "Houston, TX",
-        deliveryDate: "2025-01-25",
-      },
-    };
-
-    const result = mockData[trackingCode];
-
-    if (result) {
-      setParcelInfo(result);
-    } else {
-      setError("No parcel found with this tracking code.");
+  
+    try {
+      const response = await fetch(`http://localhost:8000/api/track-parcel/?trackingCode=${trackingCode}`);
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.error || "Something went wrong.");
+        return;
+      }
+  
+      const data = await response.json();
+      setParcelInfo(data);
+    } catch (err) {
+      setError("Failed to connect to the server. Please try again later.");
     }
   };
+  
 
   return (
     <div className="tracking-container">
@@ -59,14 +52,25 @@ const Track = () => {
       {parcelInfo && (
         <div className="parcel-info">
           <h2>Parcel Details</h2>
-          <p><strong>Status:</strong> {parcelInfo.status}</p>
-          <p><strong>Origin:</strong> {parcelInfo.origin}</p>
-          <p><strong>Destination:</strong> {parcelInfo.destination}</p>
+          <p>
+            <strong>Status:</strong> {parcelInfo.status}
+          </p>
+          <p>
+            <strong>Origin:</strong> {parcelInfo.origin}
+          </p>
+          <p>
+            <strong>Destination:</strong> {parcelInfo.destination}
+          </p>
           {parcelInfo.estimatedDelivery && (
-            <p><strong>Estimated Delivery:</strong> {parcelInfo.estimatedDelivery}</p>
+            <p>
+              <strong>Estimated Delivery:</strong>{" "}
+              {parcelInfo.estimatedDelivery}
+            </p>
           )}
           {parcelInfo.deliveryDate && (
-            <p><strong>Delivery Date:</strong> {parcelInfo.deliveryDate}</p>
+            <p>
+              <strong>Delivery Date:</strong> {parcelInfo.deliveryDate}
+            </p>
           )}
         </div>
       )}

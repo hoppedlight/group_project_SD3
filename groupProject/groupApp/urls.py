@@ -1,6 +1,6 @@
-# from django.urls import path
-# from . import views
+from django.urls import path
+from .views import track_parcel
 
-# # url_patterns = [
-# #   path("", views.home, name = "home")
-# # ]
+urlpatterns = [
+    path('api/track-parcel/', track_parcel, name='track_parcel'),
+]

@@ -5,76 +5,76 @@ import sys
 from pymongo import MongoClient
 from datetime import datetime, timezone
 
-client = MongoClient('mongodb+srv://MykhailoOstapovets:qwerty12345@database.sf5mx.mongodb.net/?retryWrites=true&w=majority&appName=database')
-db = client['nova_poshta']
+# client = MongoClient('mongodb+srv://MykhailoOstapovets:qwerty12345@database.sf5mx.mongodb.net/?retryWrites=true&w=majority&appName=database')
+# db = client['nova_poshta']
 
-users_collection = db['users']
-parcels_collection = db['parcels']
-statuses_collection = db['statuses']
+# users_collection = db['users']
+# parcels_collection = db['parcels']
+# statuses_collection = db['statuses']
 
-def create_user(name, email, phone):
-    user = {
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "registered_date": datetime.now(timezone.utc)
-    }
-    result = users_collection.insert_one(user)
-    print(f"The user was created with the ID: {result.inserted_id}")
-
-
-def create_parcel(sender_id, receiver_id, description):
-    parcel = {
-        "sender_id": sender_id,
-        "receiver_id": receiver_id,
-        "description": description,
-        "status": "Parcel was created ;)",
-        "created_at": datetime.now(timezone.utc),
-        "updated_at": datetime.now(timezone.utc)
-    }
-    result = parcels_collection.insert_one(parcel)
-    print(f"The parcel was created with the track-number: {result.inserted_id}")
+# def create_user(name, email, phone):
+#     user = {
+#         "name": name,
+#         "email": email,
+#         "phone": phone,
+#         "registered_date": datetime.now(timezone.utc)
+#     }
+#     result = users_collection.insert_one(user)
+#     print(f"The user was created with the ID: {result.inserted_id}")
 
 
-def update_parcel_status(parcel_id, new_status):
-    parcels_collection.update_one(
-        {"_id": parcel_id},
-        {"$set": {"status": new_status, "updated_at": datetime.now(timezone.utc)}}
-    )
-    status_entry = {
-        "parcel_id": parcel_id,
-        "status": new_status,
-        "timestamp": datetime.now(timezone.utc)
-    }
-    statuses_collection.insert_one(status_entry)
-    print(f"Status of parcel {parcel_id} updated to: {new_status}")
+# def create_parcel(sender_id, receiver_id, description):
+#     parcel = {
+#         "sender_id": sender_id,
+#         "receiver_id": receiver_id,
+#         "description": description,
+#         "status": "Parcel was created ;)",
+#         "created_at": datetime.now(timezone.utc),
+#         "updated_at": datetime.now(timezone.utc)
+#     }
+#     result = parcels_collection.insert_one(parcel)
+#     print(f"The parcel was created with the track-number: {result.inserted_id}")
 
 
-def track_parcel(parcel_id):
-    parcel = parcels_collection.find_one({"_id": parcel_id})
-    if parcel:
-        statuses = statuses_collection.find({"parcel_id": parcel_id})
-        print(f"Information about parcel: {parcel}")
-        print("History of statuses:")
-        for status in statuses:
-            print(f"- {status['status']} (time: {status['timestamp']})")
-    else:
-        print("Parcel not found.")
+# def update_parcel_status(parcel_id, new_status):
+#     parcels_collection.update_one(
+#         {"_id": parcel_id},
+#         {"$set": {"status": new_status, "updated_at": datetime.now(timezone.utc)}}
+#     )
+#     status_entry = {
+#         "parcel_id": parcel_id,
+#         "status": new_status,
+#         "timestamp": datetime.now(timezone.utc)
+#     }
+#     statuses_collection.insert_one(status_entry)
+#     print(f"Status of parcel {parcel_id} updated to: {new_status}")
 
 
-if __name__ == "__main__":
-    create_user("Dmytro", "Dmytro@gmail.com", "+380123456789")
-    create_user("Maksym Kyryk", "Maksym@gmail.com", "+380987654321")
+# def track_parcel(parcel_id):
+#     parcel = parcels_collection.find_one({"_id": parcel_id})
+#     if parcel:
+#         statuses = statuses_collection.find({"parcel_id": parcel_id})
+#         print(f"Information about parcel: {parcel}")
+#         print("History of statuses:")
+#         for status in statuses:
+#             print(f"- {status['status']} (time: {status['timestamp']})")
+#     else:
+#         print("Parcel not found.")
 
-    sender_id = users_collection.find_one({"name": "Maksym Kyryk"})["_id"]
-    receiver_id = users_collection.find_one({"name": "Dmytro"})["_id"]
-    create_parcel(sender_id, receiver_id, "Book for Dmytro")
 
-    parcel_id = parcels_collection.find_one({"description": "Book for Dmytro"})["_id"]
-    update_parcel_status(parcel_id, "Sent")
-    update_parcel_status(parcel_id, "On the way")
+# if __name__ == "__main__":
+#     create_user("Dmytro", "Dmytro@gmail.com", "+380123456789")
+#     create_user("Maksym Kyryk", "Maksym@gmail.com", "+380987654321")
 
-    track_parcel(parcel_id)
+#     sender_id = users_collection.find_one({"name": "Maksym Kyryk"})["_id"]
+#     receiver_id = users_collection.find_one({"name": "Dmytro"})["_id"]
+#     create_parcel(sender_id, receiver_id, "Book for Dmytro")
+
+#     parcel_id = parcels_collection.find_one({"description": "Book for Dmytro"})["_id"]
+#     update_parcel_status(parcel_id, "Sent")
+#     update_parcel_status(parcel_id, "On the way")
+
+#     track_parcel(parcel_id)
 
 def main():
     """Run administrative tasks."""
@@ -88,3 +88,6 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
+
+if __name__ == "__main__":
+    main()
