@@ -1,24 +1,20 @@
-import logo from './logo.svg';
+import Main from './pages/Main';
 import './App.css';
+import './styles/main.css';
+import { Route, Routes } from 'react-router';
+import Track from './pages/Track';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {/* Use Routes to define paths */}
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/track" element={<Track />} />
+        {/* Uncomment the following line when the `Create` component is ready */}
+        {/* <Route path="/create-parcel" element={<Create />} /> */}
+      </Routes>
+    </>
   );
 }
 
