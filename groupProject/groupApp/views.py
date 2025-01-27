@@ -1,28 +1,35 @@
 from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
+from pymongo import MongoClient
+from bson import ObjectId
+from datetime import datetime, timezone
+
+client = MongoClient('mongodb+srv://MykhailoOstapovets:qwerty12345@database.sf5mx.mongodb.net/?retryWrites=true&w=majority&appName=database')
+db = client['nova_poshta']
+
+parcels_collection = db['parcels']
+
 
 def track_parcel(request):
   if request.method == "GET":
     trackingCode = request.GET.get('trackingCode', None)
     if not trackingCode:
       return JsonResponse({"error": "Tracking code is required."}, status = 400)
+    # print(trackingCode)
     
-    mockData = {
-      "123456": {
-          "status": "In Transit",
-          "origin": "New York, NY",
-          "destination": "Los Angeles, CA",
-          "estimatedDelivery": "2025-02-01",
-      },
-      "654321": {
-          "status": "Delivered",
-          "origin": "Chicago, IL",
-          "destination": "Houston, TX",
-          "deliveryDate": "2025-01-25",
-      },
-    }
-    parcelInfo = mockData.get(trackingCode)
-    if parcelInfo:
+    tracking_code_objectid = ObjectId(trackingCode)
+    # parcel = parcels_collection.find_one({"description": "Book for Dmytro"})
+    parcel = parcels_collection.find_one({"_id": tracking_code_objectid})
+    # print(type(parcels_collection.find_one({"description": "Book for Dmytro"})["_id"]))
+    
+    if parcel:
+      parcelInfo = {
+        "status" : parcel.get("status"),
+        "description": parcel.get("description"),
+        "sender_id": str(parcel.get("sender_id")),
+        "created_at": parcel.get("created_at").strftime("%Y-%m-%d %H:%M:%S"),
+        "updated_at": parcel.get("updated_at").strftime("%Y-%m-%d %H:%M:%S"),
+      }
       return JsonResponse(parcelInfo)
     else:
       return JsonResponse({"error": "No parcel found with this tracking code."}, status = 404)
