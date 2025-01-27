@@ -15,12 +15,9 @@ def track_parcel(request):
     trackingCode = request.GET.get('trackingCode', None)
     if not trackingCode:
       return JsonResponse({"error": "Tracking code is required."}, status = 400)
-    # print(trackingCode)
     
     tracking_code_objectid = ObjectId(trackingCode)
-    # parcel = parcels_collection.find_one({"description": "Book for Dmytro"})
     parcel = parcels_collection.find_one({"_id": tracking_code_objectid})
-    # print(type(parcels_collection.find_one({"description": "Book for Dmytro"})["_id"]))
     
     if parcel:
       parcelInfo = {
