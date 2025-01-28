@@ -1,4 +1,4 @@
-import { CreateParcel } from './pages/CreateParcel';
+// import { CreateParcel } from './pages/CreateParcel';
 import AuthForm from './pages/Registration';
 import './App.css';
 

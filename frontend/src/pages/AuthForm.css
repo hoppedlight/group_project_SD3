@@ -48,12 +48,13 @@ body {
   
   .auth-field input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 2px solid #ddd;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 18px;
     transition: border-color 0.3s ease;
-  }
+    box-sizing: border-box;
+}
   
   .auth-field input:focus {
     border-color: #d32f2f;
