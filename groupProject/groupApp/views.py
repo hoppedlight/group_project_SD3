@@ -13,32 +13,31 @@ parcels_collection = db['parcels']
 
 @csrf_exempt
 def create_parcel(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body.decode("utf-8"))
-            parcel = {
-              "sending_country": data.get("sending_country"),
-              "delivery_country": data.get("delivery_country"),
-              "shipment_type": data.get("shipment_type"),
-              "parcel_size": data.get("parcel_size"),
-              "document_type": data.get("document_type"),
-              "description": data.get("description"),
-              "sender_info": data.get("sender_info"),
-              "recipient_info": data.get("recipient_info"),
-              "status": data.get("status", "Created"),
-              "created_at": datetime.now(),
-              "updated_at": datetime.now(),
-            }
-            inserted_id = parcels_collection.insert_one(parcel).inserted_id
-
-            return JsonResponse({"message": "Parcel created successfully", "parcel_id": str(inserted_id)}, status=201)
-
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON data"}, status=400)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
-    else:
-        return JsonResponse({"error": "Invalid HTTP method"}, status=405)
+  if request.method == "POST":
+    try:
+      data = json.loads(request.body.decode("utf-8"))
+      parcel = {
+        "sending_country": data.get("sending_country"),
+        "delivery_country": data.get("delivery_country"),
+        "shipment_type": data.get("shipment_type"),
+        "parcel_size": data.get("parcel_size"),
+        "document_type": data.get("document_type"),
+        "description": data.get("description"),
+        "sender_info": data.get("sender_info"),
+        "recipient_info": data.get("recipient_info"),
+        "status": data.get("status", "Created"),
+        "created_at": datetime.now(),
+        "updated_at": datetime.now(),
+      }
+      inserted_id = parcels_collection.insert_one(parcel).inserted_id
+      
+      return JsonResponse({"message": "Parcel created successfully", "parcel_id": str(inserted_id)}, status = 201)
+    except json.JSONDecodeError:
+      return JsonResponse({"error": "Invalid JSON data"}, status = 400)
+    except Exception as e:
+      return JsonResponse({"error": str(e)}, status = 500)
+  else:
+    return JsonResponse({"error": "Invalid HTTP method"}, status = 405)
 
 def track_parcel(request):
   if request.method == "GET":
@@ -68,6 +67,6 @@ def track_parcel(request):
       }
       return JsonResponse(parcel_info)
     else:
-        return JsonResponse({"error" : "No parcel found with this tracking code."}, status = 404)
+      return JsonResponse({"error" : "No parcel found with this tracking code."}, status = 404)
 
 
