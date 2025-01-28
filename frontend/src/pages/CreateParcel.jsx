@@ -1,29 +1,76 @@
-import React, { useState } from 'react';
-import './style.css';
+import React, { useState } from "react";
+import "./style.css";
 
 export const CreateParcel = () => {
-  const [sendingCountry, setSendingCountry] = useState('Poland');
-  const [deliveryCountry, setDeliveryCountry] = useState('Poland');
-  const [shipmentType, setShipmentType] = useState('parcel');
-  const [parcelSize, setParcelSize] = useState('small');
-  const [parcelDescription, setParcelDescription] = useState('');
-  const [senderInfo, setSenderInfo] = useState({ name: '', phone: '', email: '' });
-  const [recipientInfo, setRecipientInfo] = useState({ name: '', phone: '', email: '' });
-  const [documentType, setDocumentType] = useState('A4');
+  const [sendingCountry, setSendingCountry] = useState("Poland");
+  const [deliveryCountry, setDeliveryCountry] = useState("Poland");
+  const [shipmentType, setShipmentType] = useState("parcel");
+  const [parcelSize, setParcelSize] = useState("small");
+  const [parcelDescription, setParcelDescription] = useState("");
+  const [senderInfo, setSenderInfo] = useState({
+    name: "",
+    phone: "",
+    email: "",
+  });
+  const [recipientInfo, setRecipientInfo] = useState({
+    name: "",
+    phone: "",
+    email: "",
+  });
+  const [documentType, setDocumentType] = useState("A4");
 
   const handleInputChange = (event, setter) => {
     const { name, value } = event.target;
     setter((prev) => ({ ...prev, [name]: value }));
   };
 
+
+  const handleSubmit = async () => {
+    const parcelData = {
+      sending_country: sendingCountry,
+      delivery_country: deliveryCountry,
+      shipment_type: shipmentType,
+      parcel_size: shipmentType === "parcel" ? parcelSize : null,
+      document_type: shipmentType === "documents" ? documentType : null,
+      description: parcelDescription,
+      sender_info: senderInfo,
+      recipient_info: recipientInfo,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8000/api/create-parcel/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(parcelData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error creating parcel:", errorData);
+        alert(errorData.error || "Failed to create parcel.");
+        return;
+      }
+
+      const data = await response.json();
+      alert(
+        `Parcel created! Tracking code: ${data.parcel_id}`
+      );
+    } catch (err) {
+      console.error("Error connecting to server:", err);
+      alert("Failed to connect to the server. Please try again later.");
+    }
+  };
+
   return (
     <div className="page-wrapper">
-      <div className="container" style={{ backgroundColor: '#f0f0f0' }}>
+      <div className="container" style={{ backgroundColor: "#f0f0f0" }}>
         <div className="header-line">
-          <img 
+          <img
             src="http://localhost:3000/image1.png"
             alt="Logo"
-            className="logo" 
+            className="logo"
           />
           <h1 className="header-title">Nova Post</h1>
         </div>
@@ -63,47 +110,59 @@ export const CreateParcel = () => {
           </select>
         </div>
 
-        {/* Shipment Type */}
         <div className="form-group">
           <h2 className="section-title">Shipment Type</h2>
           <div className="button-group">
             <button
-              className={`button ${shipmentType === 'parcel' ? 'active' : ''}`}
-              onClick={() => setShipmentType('parcel')}
+              className={`button ${shipmentType === "parcel" ? "active" : ""}`}
+              onClick={() => setShipmentType("parcel")}
             >
               Parcel
             </button>
             <button
-              className={`button ${shipmentType === 'documents' ? 'active' : ''}`}
-              onClick={() => setShipmentType('documents')}
+              className={`button ${
+                shipmentType === "documents" ? "active" : ""
+              }`}
+              onClick={() => setShipmentType("documents")}
             >
               Documents
             </button>
           </div>
         </div>
 
-        {/* Parcel or Document Options */}
-        {shipmentType === 'parcel' ? (
+        {shipmentType === "parcel" ? (
           <div className="form-group">
             <h2 className="section-title">Parcel Size</h2>
             <div className="grid">
               <button
-                className={`grid-item ${parcelSize === 'small' ? 'active' : ''}`}
-                onClick={() => setParcelSize('small')}
+                className={`grid-item ${
+                  parcelSize === "small" ? "active" : ""
+                }`}
+                onClick={() => setParcelSize("small")}
               >
-                Small<br /><span className="description">Up to 2kg | 35×20×10cm</span>
+                Small
+                <br />
+                <span className="description">Up to 2kg | 35×20×10cm</span>
               </button>
               <button
-                className={`grid-item ${parcelSize === 'medium' ? 'active' : ''}`}
-                onClick={() => setParcelSize('medium')}
+                className={`grid-item ${
+                  parcelSize === "medium" ? "active" : ""
+                }`}
+                onClick={() => setParcelSize("medium")}
               >
-                Medium<br /><span className="description">Up to 10kg | 40×30×30cm</span>
+                Medium
+                <br />
+                <span className="description">Up to 10kg | 40×30×30cm</span>
               </button>
               <button
-                className={`grid-item ${parcelSize === 'large' ? 'active' : ''}`}
-                onClick={() => setParcelSize('large')}
+                className={`grid-item ${
+                  parcelSize === "large" ? "active" : ""
+                }`}
+                onClick={() => setParcelSize("large")}
               >
-                Large<br /><span className="description">Up to 30kg | 60×50×40cm</span>
+                Large
+                <br />
+                <span className="description">Up to 30kg | 60×50×40cm</span>
               </button>
             </div>
           </div>
@@ -112,28 +171,33 @@ export const CreateParcel = () => {
             <h2 className="section-title">Document Type</h2>
             <div className="grid">
               <button
-                className={`grid-item ${documentType === 'A4' ? 'active' : ''}`}
-                onClick={() => setDocumentType('A4')}
+                className={`grid-item ${documentType === "A4" ? "active" : ""}`}
+                onClick={() => setDocumentType("A4")}
               >
-                A4<br /><span className="description">Standard Document</span>
+                A4
+                <br />
+                <span className="description">Standard Document</span>
               </button>
               <button
-                className={`grid-item ${documentType === 'A3' ? 'active' : ''}`}
-                onClick={() => setDocumentType('A3')}
+                className={`grid-item ${documentType === "A3" ? "active" : ""}`}
+                onClick={() => setDocumentType("A3")}
               >
-                A3<br /><span className="description">Larger Document</span>
+                A3
+                <br />
+                <span className="description">Larger Document</span>
               </button>
               <button
-                className={`grid-item ${documentType === 'A2' ? 'active' : ''}`}
-                onClick={() => setDocumentType('A2')}
+                className={`grid-item ${documentType === "A2" ? "active" : ""}`}
+                onClick={() => setDocumentType("A2")}
               >
-                A2<br /><span className="description">Poster Size</span>
+                A2
+                <br />
+                <span className="description">Poster Size</span>
               </button>
             </div>
           </div>
         )}
 
-        {/* Parcel Description */}
         <div className="form-group">
           <h2 className="section-title">What Are You Sending?</h2>
           <textarea
@@ -143,10 +207,11 @@ export const CreateParcel = () => {
             value={parcelDescription}
             onChange={(e) => setParcelDescription(e.target.value)}
           ></textarea>
-          <p className="warning">Prohibited items are not allowed for shipment.</p>
+          <p className="warning">
+            Prohibited items are not allowed for shipment.
+          </p>
         </div>
 
-        {/* Sender Information */}
         <div className="form-group">
           <h2 className="section-title">Sender Information</h2>
           <input
@@ -172,7 +237,6 @@ export const CreateParcel = () => {
           />
         </div>
 
-        {/* Recipient Information */}
         <div className="form-group">
           <h2 className="section-title">Recipient Information</h2>
           <input
@@ -198,9 +262,10 @@ export const CreateParcel = () => {
           />
         </div>
 
-        {/* Submit Button */}
         <div className="actions">
-          <button className="submit-button">Submit</button>
+          <button className="submit-button" onClick={handleSubmit}>
+            Submit
+          </button>
         </div>
       </div>
     </div>

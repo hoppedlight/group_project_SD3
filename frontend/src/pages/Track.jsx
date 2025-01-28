@@ -60,18 +60,52 @@ const Track = () => {
             <strong>Description:</strong> {parcelInfo.description}
           </p>
           <p>
+            <strong>Shipment Type:</strong> {parcelInfo.shipment_type}
+          </p>
+          {parcelInfo.shipment_type === "parcel" && (
+            <p>
+              <strong>Parcel Size:</strong> {parcelInfo.parcel_size}
+            </p>
+          )}
+          {parcelInfo.shipment_type === "documents" && (
+            <p>
+              <strong>Document Type:</strong> {parcelInfo.document_type}
+            </p>
+          )}
+          <p>
+            <strong>Sending Country:</strong> {parcelInfo.sending_country}
+          </p>
+          <p>
+            <strong>Delivery Country:</strong> {parcelInfo.delivery_country}
+          </p>
+          <p>
             <strong>Created at:</strong> {parcelInfo.created_at}
           </p>
           {parcelInfo.updated_at && (
             <p>
-              <strong>Estimated Delivery:</strong> {parcelInfo.updated_at}
+              <strong>Last Updated:</strong> {parcelInfo.updated_at}
             </p>
           )}
-          {/* {parcelInfo.deliveryDate && (
-            <p>
-              <strong>Delivery Date:</strong> {parcelInfo.deliveryDate}
-            </p>
-          )} */}
+          {/* <h3>Sender Information</h3>
+          <p>
+            <strong>Name:</strong> {parcelInfo.sender_info.name}
+          </p>
+          <p>
+            <strong>Phone:</strong> {parcelInfo.sender_info.phone}
+          </p>
+          <p>
+            <strong>Email:</strong> {parcelInfo.sender_info.email}
+          </p>
+          <h3>Recipient Information</h3>
+          <p>
+            <strong>Name:</strong> {parcelInfo.recipient_info.name}
+          </p>
+          <p>
+            <strong>Phone:</strong> {parcelInfo.recipient_info.phone}
+          </p>
+          <p>
+            <strong>Email:</strong> {parcelInfo.recipient_info.email}
+          </p> */}
         </div>
       )}
     </div>
