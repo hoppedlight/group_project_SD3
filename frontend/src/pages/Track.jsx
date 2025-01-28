@@ -86,26 +86,6 @@ const Track = () => {
               <strong>Last Updated:</strong> {parcelInfo.updated_at}
             </p>
           )}
-          {/* <h3>Sender Information</h3>
-          <p>
-            <strong>Name:</strong> {parcelInfo.sender_info.name}
-          </p>
-          <p>
-            <strong>Phone:</strong> {parcelInfo.sender_info.phone}
-          </p>
-          <p>
-            <strong>Email:</strong> {parcelInfo.sender_info.email}
-          </p>
-          <h3>Recipient Information</h3>
-          <p>
-            <strong>Name:</strong> {parcelInfo.recipient_info.name}
-          </p>
-          <p>
-            <strong>Phone:</strong> {parcelInfo.recipient_info.phone}
-          </p>
-          <p>
-            <strong>Email:</strong> {parcelInfo.recipient_info.email}
-          </p> */}
         </div>
       )}
     </div>
