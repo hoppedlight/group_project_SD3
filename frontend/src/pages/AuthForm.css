@@ -1,99 +1,124 @@
 body {
-    background-image: url('http://localhost:3000/background-image.png');
-    background-size: cover;
-    background-position: center;
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  
-  .auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-  }
-  
-  .auth-box {
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    width: 400px;
-    text-align: center;
-  }
-  
-  .auth-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #b71c1c;
-  }
-  
-  .auth-field {
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  .auth-field label {
-    font-weight: 600;
-    color: #555;
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .auth-field input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 18px;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #f0f0f0, #ffffff);
+  color: #333;
+}
+
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  min-height: 100vh;
+  background-image: url('http://localhost:3000/background-image.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; 
+}
+
+.container {
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
+  background-color: white; 
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: left;
 }
   
-  .auth-field input:focus {
-    border-color: #d32f2f;
-    outline: none;
-  }
-  
-  .auth-button {
-    width: 100%;
-    padding: 12px;
-    background: #d32f2f;
-    border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  .auth-button:hover {
-    background: #b71c1c;
-  }
-  
-  .auth-footer {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #555;
-  }
-  
-  .auth-toggle {
-    background: none;
-    border: none;
-    color: #d32f2f;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .auth-toggle:hover {
-    color: #b71c1c;
-  }
-  
+.header-line {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  background-color: #E30613;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 8px 8px 0 0;
+  height: 50px;
+}
+
+.header-line img {
+  height: 50px;
+  margin-right: 50px;
+}
+
+.header-line h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.button {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button.active,
+.button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.grid-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.grid-item.active,
+.grid-item:hover {
+  background-color: #28a745;
+  color: #fff;
+}
