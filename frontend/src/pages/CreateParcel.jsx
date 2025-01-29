@@ -6,201 +6,140 @@ export const CreateParcel = () => {
   const [deliveryCountry, setDeliveryCountry] = useState('Poland');
   const [shipmentType, setShipmentType] = useState('parcel');
   const [parcelSize, setParcelSize] = useState('small');
+  const [documentType, setDocumentType] = useState('A4');
   const [parcelDescription, setParcelDescription] = useState('');
   const [senderInfo, setSenderInfo] = useState({ name: '', phone: '', email: '' });
   const [recipientInfo, setRecipientInfo] = useState({ name: '', phone: '', email: '' });
-  const [documentType, setDocumentType] = useState('A4');
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (event, setter) => {
     const { name, value } = event.target;
     setter((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validateForm = () => {
+    let newErrors = {};
+    if (!senderInfo.name) newErrors.senderName = 'Sender name is required.';
+    if (!senderInfo.phone) newErrors.senderPhone = 'Sender phone number is required.';
+    if (!senderInfo.email) newErrors.senderEmail = 'Sender email is required.';
+    if (!recipientInfo.name) newErrors.recipientName = 'Recipient name is required.';
+    if (!recipientInfo.phone) newErrors.recipientPhone = 'Recipient phone number is required.';
+    if (!recipientInfo.email) newErrors.recipientEmail = 'Recipient email is required.';
+    if (!parcelDescription) newErrors.parcelDescription = 'Parcel description is required.';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      alert('Form submitted successfully!');
+    }
+  };
+
   return (
     <div className="page-wrapper">
-      <div className="container" style={{ backgroundColor: '#f0f0f0' }}>
-        <div className="header-line">
-          <img 
-            src="http://localhost:3000/image1.png"
-            alt="Logo"
-            className="logo" 
-          />
-          <h1 className="header-title">Nova Post</h1>
-        </div>
-
+      <div className="container">
         <h1 className="title">Create a Parcel</h1>
 
+        {/* Sending & Delivery Countries */}
         <div className="form-group">
           <label className="label">Sending Country</label>
-          <select
-            className="input"
-            value={sendingCountry}
-            onChange={(e) => setSendingCountry(e.target.value)}
-          >
-            <option value="Poland">Poland</option>
-            <option value="Ukraine">Ukraine</option>
-            <option value="Germany">Germany</option>
-            <option value="France">France</option>
-            <option value="Slovakia">Slovakia</option>
-            <option value="Lithuania">Lithuania</option>
-            <option value="Czech Republic">Czech Republic</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label className="label">Delivery Country</label>
-          <select
-            className="input"
-            value={deliveryCountry}
-            onChange={(e) => setDeliveryCountry(e.target.value)}
-          >
-            <option value="Poland">Poland</option>
-            <option value="Ukraine">Ukraine</option>
-            <option value="Germany">Germany</option>
-            <option value="France">France</option>
-            <option value="Slovakia">Slovakia</option>
-            <option value="Lithuania">Lithuania</option>
-            <option value="Czech Republic">Czech Republic</option>
+          <select className="input" value={sendingCountry} onChange={(e) => setSendingCountry(e.target.value)}>
+            {['Poland', 'Ukraine', 'Germany', 'France', 'Slovakia', 'Lithuania', 'Czech Republic'].map((country) => (
+              <option key={country} value={country}>{country}</option>
+            ))}
           </select>
         </div>
 
-        {/* Shipment Type */}
+        <div className="form-group">
+          <label className="label">Delivery Country</label>
+          <select className="input" value={deliveryCountry} onChange={(e) => setDeliveryCountry(e.target.value)}>
+            {['Poland', 'Ukraine', 'Germany', 'France', 'Slovakia', 'Lithuania', 'Czech Republic'].map((country) => (
+              <option key={country} value={country}>{country}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Shipment Type Selection */}
         <div className="form-group">
           <h2 className="section-title">Shipment Type</h2>
           <div className="button-group">
-            <button
-              className={`button ${shipmentType === 'parcel' ? 'active' : ''}`}
-              onClick={() => setShipmentType('parcel')}
-            >
+            <button className={`button ${shipmentType === 'parcel' ? 'active' : ''}`} onClick={() => setShipmentType('parcel')}>
               Parcel
             </button>
-            <button
-              className={`button ${shipmentType === 'documents' ? 'active' : ''}`}
-              onClick={() => setShipmentType('documents')}
-            >
+            <button className={`button ${shipmentType === 'documents' ? 'active' : ''}`} onClick={() => setShipmentType('documents')}>
               Documents
             </button>
           </div>
         </div>
 
-        {/* Parcel or Document Options */}
+        {/* Parcel Size or Document Type Selection */}
         {shipmentType === 'parcel' ? (
           <div className="form-group">
             <h2 className="section-title">Parcel Size</h2>
             <div className="grid">
-              <button
-                className={`grid-item ${parcelSize === 'small' ? 'active' : ''}`}
-                onClick={() => setParcelSize('small')}
-              >
-                Small<br /><span className="description">Up to 2kg | 35×20×10cm</span>
-              </button>
-              <button
-                className={`grid-item ${parcelSize === 'medium' ? 'active' : ''}`}
-                onClick={() => setParcelSize('medium')}
-              >
-                Medium<br /><span className="description">Up to 10kg | 40×30×30cm</span>
-              </button>
-              <button
-                className={`grid-item ${parcelSize === 'large' ? 'active' : ''}`}
-                onClick={() => setParcelSize('large')}
-              >
-                Large<br /><span className="description">Up to 30kg | 60×50×40cm</span>
-              </button>
+              {[
+                { size: 'small', description: 'Up to 2kg | 35×20×10cm' },
+                { size: 'medium', description: 'Up to 10kg | 40×30×30cm' },
+                { size: 'large', description: 'Up to 30kg | 60×50×40cm' },
+              ].map(({ size, description }) => (
+                <button key={size} className={`grid-item ${parcelSize === size ? 'active' : ''}`} onClick={() => setParcelSize(size)}>
+                  {size.charAt(0).toUpperCase() + size.slice(1)}
+                  <br /><span className="description">{description}</span>
+                </button>
+              ))}
             </div>
           </div>
         ) : (
           <div className="form-group">
             <h2 className="section-title">Document Type</h2>
             <div className="grid">
-              <button
-                className={`grid-item ${documentType === 'A4' ? 'active' : ''}`}
-                onClick={() => setDocumentType('A4')}
-              >
-                A4<br /><span className="description">Standard Document</span>
-              </button>
-              <button
-                className={`grid-item ${documentType === 'A3' ? 'active' : ''}`}
-                onClick={() => setDocumentType('A3')}
-              >
-                A3<br /><span className="description">Larger Document</span>
-              </button>
-              <button
-                className={`grid-item ${documentType === 'A2' ? 'active' : ''}`}
-                onClick={() => setDocumentType('A2')}
-              >
-                A2<br /><span className="description">Poster Size</span>
-              </button>
+              {[
+                { type: 'A4', description: 'Standard Document' },
+                { type: 'A3', description: 'Larger Document' },
+                { type: 'A2', description: 'Poster Size' },
+              ].map(({ type, description }) => (
+                <button key={type} className={`grid-item ${documentType === type ? 'active' : ''}`} onClick={() => setDocumentType(type)}>
+                  {type}<br /><span className="description">{description}</span>
+                </button>
+              ))}
             </div>
           </div>
         )}
 
         {/* Parcel Description */}
         <div className="form-group">
-          <h2 className="section-title">What Are You Sending?</h2>
-          <textarea
-            className="textarea"
-            placeholder="Describe the contents of the parcel"
-            rows="4"
-            value={parcelDescription}
-            onChange={(e) => setParcelDescription(e.target.value)}
-          ></textarea>
-          <p className="warning">Prohibited items are not allowed for shipment.</p>
+          <h2 className="section-title">Parcel Description</h2>
+          <textarea className={`textarea ${errors.parcelDescription ? 'error' : ''}`} placeholder="Describe your parcel" rows="4" value={parcelDescription} onChange={(e) => setParcelDescription(e.target.value)}></textarea>
+          {errors.parcelDescription && <p className="error-message">{errors.parcelDescription}</p>}
         </div>
 
-        {/* Sender Information */}
-        <div className="form-group">
-          <h2 className="section-title">Sender Information</h2>
-          <input
-            className="input"
-            name="name"
-            placeholder="Name"
-            value={senderInfo.name}
-            onChange={(e) => handleInputChange(e, setSenderInfo)}
-          />
-          <input
-            className="input"
-            name="phone"
-            placeholder="Phone Number"
-            value={senderInfo.phone}
-            onChange={(e) => handleInputChange(e, setSenderInfo)}
-          />
-          <input
-            className="input"
-            name="email"
-            placeholder="Email"
-            value={senderInfo.email}
-            onChange={(e) => handleInputChange(e, setSenderInfo)}
-          />
-        </div>
-
-        {/* Recipient Information */}
-        <div className="form-group">
-          <h2 className="section-title">Recipient Information</h2>
-          <input
-            className="input"
-            name="name"
-            placeholder="Name"
-            value={recipientInfo.name}
-            onChange={(e) => handleInputChange(e, setRecipientInfo)}
-          />
-          <input
-            className="input"
-            name="phone"
-            placeholder="Phone Number"
-            value={recipientInfo.phone}
-            onChange={(e) => handleInputChange(e, setRecipientInfo)}
-          />
-          <input
-            className="input"
-            name="email"
-            placeholder="Email"
-            value={recipientInfo.email}
-            onChange={(e) => handleInputChange(e, setRecipientInfo)}
-          />
-        </div>
+        {/* Sender & Recipient Information */}
+        {[
+          { title: 'Sender', state: senderInfo, setState: setSenderInfo, errorKeys: ['senderName', 'senderPhone', 'senderEmail'] },
+          { title: 'Recipient', state: recipientInfo, setState: setRecipientInfo, errorKeys: ['recipientName', 'recipientPhone', 'recipientEmail'] },
+        ].map(({ title, state, setState, errorKeys }) => (
+          <div key={title} className="form-group">
+            <h2 className="section-title">{title} Information</h2>
+            {['name', 'phone', 'email'].map((field, index) => (
+              <div key={field}>
+                <input
+                  className={`input ${errors[errorKeys[index]] ? 'error' : ''}`}
+                  name={field}
+                  placeholder={`${title} ${field.charAt(0).toUpperCase() + field.slice(1)}`}
+                  value={state[field]}
+                  onChange={(e) => handleInputChange(e, setState)}
+                />
+                {errors[errorKeys[index]] && <p className="error-message">{errors[errorKeys[index]]}</p>}
+              </div>
+            ))}
+          </div>
+        ))}
 
         {/* Submit Button */}
         <div className="actions">
-          <button className="submit-button">Submit</button>
+          <button className="submit-button" onClick={handleSubmit}>Submit</button>
         </div>
       </div>
     </div>
