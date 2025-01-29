@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse
+from django.contrib.auth.hashers import make_password, check_password
 from django.http import JsonResponse
 from pymongo import MongoClient
 from bson import ObjectId
@@ -10,6 +11,7 @@ client = MongoClient('mongodb+srv://MykhailoOstapovets:qwerty12345@database.sf5m
 db = client['nova_poshta']
 
 parcels_collection = db['parcels']
+users_collection = db['users']
 
 @csrf_exempt
 def create_parcel(request):
@@ -69,4 +71,51 @@ def track_parcel(request):
     else:
       return JsonResponse({"error" : "No parcel found with this tracking code."}, status = 404)
 
-
+@csrf_exempt
+def register_user(request):
+  if request.method == "POST":
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        full_name = data.get("full_name")
+        email = data.get("email")
+        password = data.get("password")
+        
+        if users_collection.find_one({"email" : email}):
+            return JsonResponse({"message" : "User already exists"}, status = 400)
+        
+        hashed_password = make_password(password)
+        user_data = {
+            "full_name" : full_name,
+            "email" : email,
+            "password" : hashed_password,
+        }
+        users_collection.insert_one(user_data)
+        
+        return JsonResponse({"message" : "User registered successfully"}, status = 201)
+    except json.JSONDecodeError:
+      return JsonResponse({"error" : "Invalid JSON data"}, status = 400)
+    except Exception as e:
+      return JsonResponse({"error" : str(e)}, status = 500)
+  else:
+    return JsonResponse({"error" : "Invalid HTTP method"}, status = 405)
+  
+  
+@csrf_exempt
+def login_user(request):
+  if request.method == "POST":
+    try:
+      data = json.loads(request.body.decode("utf-8"))
+      email = data.get("email")
+      password = data.get("password")
+      
+      user = users_collection.find_one({"email" : email})
+      if user and check_password(password, user["password"]):
+          return JsonResponse({"message" : "Login successful"}, status = 200)
+      
+      return JsonResponse({"message" : "Invalid credentials"}, status = 401)
+    except json.JSONDecodeError:
+      return JsonResponse({"error" : "Invalid JSON data"}, status = 400)
+    except Exception as e:
+      return JsonResponse({"error" : str(e)}, status = 500)
+  else:
+    return JsonResponse({"error" : "Invalid HTTP method"}, status = 405)

@@ -6,6 +6,7 @@ import Track from './pages/Track';
 import CreateParcel from './pages/CreateParcel'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import Registration from './pages/Registration'
 
 
 function App() {
@@ -18,8 +19,7 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/track" element={<Track />} />
           <Route path="/create-parcel" element={<CreateParcel />} />
-          {/* <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} /> */}
+          <Route path="/register" element={<Registration />} />
         </Routes>
       </div>
       <Footer />
