@@ -3,9 +3,10 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.http import JsonResponse
 from pymongo import MongoClient
 from bson import ObjectId
-from datetime import datetime, timezone
+from datetime import datetime, timedelta
 from django.views.decorators.csrf import csrf_exempt
 import json
+
 
 client = MongoClient('mongodb+srv://MykhailoOstapovets:qwerty12345@database.sf5mx.mongodb.net/?retryWrites=true&w=majority&appName=database')
 db = client['nova_poshta']
@@ -29,7 +30,7 @@ def create_parcel(request):
         "recipient_info": data.get("recipient_info"),
         "status": data.get("status", "Created"),
         "created_at": datetime.now(),
-        "updated_at": datetime.now(),
+        "updated_at": datetime.now() + timedelta(hours = 72),
       }
       inserted_id = parcels_collection.insert_one(parcel).inserted_id
       
