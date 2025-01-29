@@ -4,19 +4,26 @@ import './styles/main.css';
 import { Route, Routes } from 'react-router';
 import Track from './pages/Track';
 import CreateParcel from './pages/CreateParcel'
+import Header from './components/Header'
+import Footer from './components/Footer'
+
 
 function App() {
   return (
-    <>
-      {/* Use Routes to define paths */}
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/track" element={<Track />} />
-        <Route path="/create-parcel" element = {<CreateParcel />} />
-        {/* Uncomment the following line when the `Create` component is ready */}
-        {/* <Route path="/create-parcel" element={<Create />} /> */}
-      </Routes>
-    </>
+    <div className='wrap__container'>
+
+      <Header />
+      <div className="main__container">
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/track" element={<Track />} />
+          <Route path="/create-parcel" element={<CreateParcel />} />
+          {/* <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} /> */}
+        </Routes>
+      </div>
+      <Footer />
+    </div>
   );
 }
 
