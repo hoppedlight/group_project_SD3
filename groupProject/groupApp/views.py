@@ -76,23 +76,23 @@ def track_parcel(request):
 def register_user(request):
   if request.method == "POST":
     try:
-        data = json.loads(request.body.decode("utf-8"))
-        full_name = data.get("full_name")
-        email = data.get("email")
-        password = data.get("password")
+      data = json.loads(request.body.decode("utf-8"))
+      full_name = data.get("full_name")
+      email = data.get("email")
+      password = data.get("password")
+      
+      if users_collection.find_one({"email" : email}):
+        return JsonResponse({"message" : "User already exists"}, status = 400)
+      
+      hashed_password = make_password(password)
+      user_data = {
+        "full_name" : full_name,
+        "email" : email,
+        "password" : hashed_password,
+      }
+      users_collection.insert_one(user_data)
         
-        if users_collection.find_one({"email" : email}):
-            return JsonResponse({"message" : "User already exists"}, status = 400)
-        
-        hashed_password = make_password(password)
-        user_data = {
-            "full_name" : full_name,
-            "email" : email,
-            "password" : hashed_password,
-        }
-        users_collection.insert_one(user_data)
-        
-        return JsonResponse({"message" : "User registered successfully"}, status = 201)
+      return JsonResponse({"message" : "User registered successfully"}, status = 201)
     except json.JSONDecodeError:
       return JsonResponse({"error" : "Invalid JSON data"}, status = 400)
     except Exception as e:
@@ -111,7 +111,7 @@ def login_user(request):
       
       user = users_collection.find_one({"email" : email})
       if user and check_password(password, user["password"]):
-          return JsonResponse({"message" : "Login successful"}, status = 200)
+        return JsonResponse({"message" : "Login successful"}, status = 200)
       
       return JsonResponse({"message" : "Invalid credentials"}, status = 401)
     except json.JSONDecodeError:
